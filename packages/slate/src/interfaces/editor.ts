@@ -63,6 +63,17 @@ export interface Editor {
 export const Editor = {
   /**
    * Get the ancestor above a location in the document.
+   *
+   * If the location is a range, it will look for a common ancestor to both
+   * the anchor and focus points.
+   *
+   * @param editor Editor instance to search
+   * @param options.at Location to start at. Defaults to editor.selection
+   * @param options.match Predicate for matching the ancestor to return
+   * @param options.mode Whether to return highest or lowest ancestor in the node tree. Defaults to lowest
+   * @param options.voids Whether or not to include void elements in the result
+   *
+   * @returns A [Node, Path] tuple for the first matching ancestor
    */
 
   above<T extends Ancestor>(
@@ -105,6 +116,10 @@ export const Editor = {
    *
    * If the selection is currently collapsed, the marks will be added to the
    * `editor.marks` property instead, and applied when text is inserted next.
+   *
+   * @param editor Editor instance that will receive the mark
+   * @param key Property key that will be added to the matching leaf nodes
+   * @param value Property value that will be added to the matching leaf nodes
    */
 
   addMark(editor: Editor, key: string, value: any): void {
@@ -113,6 +128,13 @@ export const Editor = {
 
   /**
    * Get the point after a location.
+   *
+   * @param editor Editor instance to search
+   * @param at Location to start at
+   * @param options.distance Number of units after the location. Defaults to 1
+   * @param options.unit Distance unit. Defaults to 'offset'
+   *
+   * @returns Matching point
    */
 
   after(
@@ -147,6 +169,13 @@ export const Editor = {
 
   /**
    * Get the point before a location.
+   *
+   * @param editor Editor instance to search
+   * @param at Location to start at
+   * @param options.distance Number of units before the location. Defaults to 1
+   * @param options.unit Distance unit. Defaults to 'offset'
+   *
+   * @returns Matching point
    */
 
   before(
@@ -185,6 +214,9 @@ export const Editor = {
 
   /**
    * Delete content in the editor backward from the current selection.
+   *
+   * @param editor Editor instance
+   * @param options.unit Unit to delete. Defaults to 'character'
    */
 
   deleteBackward(
@@ -199,6 +231,9 @@ export const Editor = {
 
   /**
    * Delete content in the editor forward from the current selection.
+   *
+   * @param editor Editor instance
+   * @param options.unit Unit to delete. Defaults to 'character'
    */
 
   deleteForward(
@@ -213,6 +248,8 @@ export const Editor = {
 
   /**
    * Delete the content in the current selection.
+   *
+   * @param editor Editor instance
    */
 
   deleteFragment(editor: Editor): void {
@@ -221,6 +258,11 @@ export const Editor = {
 
   /**
    * Get the start and end points of a location.
+   *
+   * @param editor Editor instance containing the location
+   * @param at Location to target
+   *
+   * @returns A tuple containing the start and end points
    */
 
   edges(editor: Editor, at: Location): [Point, Point] {
@@ -229,6 +271,11 @@ export const Editor = {
 
   /**
    * Get the end point of a location.
+   *
+   * @param editor Editor instance containing the location
+   * @param at Location to target
+   *
+   * @returns The end point
    */
 
   end(editor: Editor, at: Location): Point {
@@ -237,6 +284,11 @@ export const Editor = {
 
   /**
    * Get the first node at a location.
+   *
+   * @param editor Editor instance containing the location
+   * @param at Location to target
+   *
+   * @returns A [Node, Path] tuple for the first node
    */
 
   first(editor: Editor, at: Location): NodeEntry {
@@ -246,6 +298,11 @@ export const Editor = {
 
   /**
    * Get the fragment at a location.
+   *
+   * @param editor Editor instance containing the location
+   * @param at Location to target
+   *
+   * @returns List of descendant nodes
    */
 
   fragment(editor: Editor, at: Location): Descendant[] {
@@ -255,6 +312,11 @@ export const Editor = {
   },
   /**
    * Check if a node has block children.
+   *
+   * @param editor Editor instance containing the node
+   * @param element Element node to check
+   *
+   * @returns Whether or not the node has block children.
    */
 
   hasBlocks(editor: Editor, element: Element): boolean {
@@ -263,6 +325,11 @@ export const Editor = {
 
   /**
    * Check if a node has inline and text children.
+   *
+   * @param editor Editor instance containing the node
+   * @param element Element node to check
+   *
+   * @returns Whether or not the node has inline or text children
    */
 
   hasInlines(editor: Editor, element: Element): boolean {
@@ -273,6 +340,11 @@ export const Editor = {
 
   /**
    * Check if a node has text children.
+   *
+   * @param editor Editor instance containing the node
+   * @param element Element node to check
+   *
+   * @returns Whether or not all children are text nodes
    */
 
   hasTexts(editor: Editor, element: Element): boolean {
@@ -283,6 +355,8 @@ export const Editor = {
    * Insert a block break at the current selection.
    *
    * If the selection is currently expanded, it will be deleted first.
+   *
+   * @param editor Editor instance to insert the break into
    */
 
   insertBreak(editor: Editor): void {
@@ -293,6 +367,9 @@ export const Editor = {
    * Insert a fragment at the current selection.
    *
    * If the selection is currently expanded, it will be deleted first.
+   *
+   * @param editor Editor instance to insert the fragment into
+   * @param fragment Fragment nodes to insert
    */
 
   insertFragment(editor: Editor, fragment: Node[]): void {
@@ -303,6 +380,9 @@ export const Editor = {
    * Insert a node at the current selection.
    *
    * If the selection is currently expanded, it will be deleted first.
+   *
+   * @param editor Editor instance to insert the node into
+   * @param node Node to insert
    */
 
   insertNode(editor: Editor, node: Node): void {
@@ -313,6 +393,9 @@ export const Editor = {
    * Insert text at the current selection.
    *
    * If the selection is currently expanded, it will be deleted first.
+   *
+   * @param editor Editor instance to insert text into
+   * @param text Text to insert
    */
 
   insertText(editor: Editor, text: string): void {
@@ -321,6 +404,11 @@ export const Editor = {
 
   /**
    * Check if a value is a block `Element` object.
+   *
+   * @param editor Editor instance to check the value against
+   * @param value Value to check
+   *
+   * @returns Whether or not the value is a block `Element` object.
    */
 
   isBlock(editor: Editor, value: any): value is Element {
@@ -329,6 +417,10 @@ export const Editor = {
 
   /**
    * Check if a value is an `Editor` object.
+   *
+   * @param value Value to check
+   *
+   * @returns Whether or not the value is an `Editor` object
    */
 
   isEditor(value: any): value is Editor {
@@ -357,6 +449,9 @@ export const Editor = {
 
   /**
    * Check if a point is the end point of a location.
+   *
+   * @param editor Editor containing the point to check
+   * @param at Location to check
    */
 
   isEnd(editor: Editor, point: Point, at: Location): boolean {
@@ -366,6 +461,12 @@ export const Editor = {
 
   /**
    * Check if a point is an edge of a location.
+   *
+   * @param editor Editor containing the point and location
+   * @param point Point to check
+   * @param at Location to check
+   *
+   * @returns Whether or not the point is an edge of the given location
    */
 
   isEdge(editor: Editor, point: Point, at: Location): boolean {
@@ -374,6 +475,11 @@ export const Editor = {
 
   /**
    * Check if an element is empty, accounting for void nodes.
+   *
+   * @param editor Editor containing the element
+   * @param element Element node to check
+   *
+   * @returns Whether or not the element is empty
    */
 
   isEmpty(editor: Editor, element: Element): boolean {
@@ -390,6 +496,11 @@ export const Editor = {
 
   /**
    * Check if a value is an inline `Element` object.
+   *
+   * @param editor Editor to check the value against
+   * @param value Value to check
+   *
+   * @returns Whether or not the value is an inline `Element` object
    */
 
   isInline(editor: Editor, value: any): value is Element {
@@ -398,6 +509,10 @@ export const Editor = {
 
   /**
    * Check if the editor is currently normalizing after each operation.
+   *
+   * @param editor Editor instance to check
+   *
+   * @returns Whether or not the editor is currently normalizing
    */
 
   isNormalizing(editor: Editor): boolean {
@@ -407,6 +522,12 @@ export const Editor = {
 
   /**
    * Check if a point is the start point of a location.
+   *
+   * @param editor Editor containing the point and location
+   * @param point Point to check
+   * @param at Location to check
+   *
+   * @returns Whether or not the point is the start of the given location
    */
 
   isStart(editor: Editor, point: Point, at: Location): boolean {
@@ -421,6 +542,11 @@ export const Editor = {
 
   /**
    * Check if a value is a void `Element` object.
+   *
+   * @param editor Editor to check the value against
+   * @param value Value to check
+   *
+   * @returns Whether or not the value is a void `Element` object
    */
 
   isVoid(editor: Editor, value: any): value is Element {
@@ -429,6 +555,11 @@ export const Editor = {
 
   /**
    * Get the last node at a location.
+   *
+   * @param editor Editor containing the location
+   * @param at Location to check
+   *
+   * @returns A [Node, Path] tuple for the last node at the given location
    */
 
   last(editor: Editor, at: Location): NodeEntry {
@@ -438,6 +569,16 @@ export const Editor = {
 
   /**
    * Get the leaf text node at a location.
+   *
+   * @param editor Editor containing the location
+   * @param at Location to check
+   * @param options.depth Max path depth to search
+   * @param options.edge If `at` is a `Range`, return the 'start' or 'end' leaf
+   *  node
+   *
+   * @returns A [Node, Path] tuple for the leaf text node at the given location.
+   *  If the path matching the given options is not a Text node, an error will be
+   *  thrown.
    */
 
   leaf(
@@ -455,6 +596,23 @@ export const Editor = {
 
   /**
    * Iterate through all of the levels at a location.
+   *
+   * The iteration starts at the editor root downward to the
+   * node corresponding to the `at` option unless `reverse` is
+   * true in which case the interation will go from bottom to top.
+   * If no `at` value is provided, the current editor selection
+   * will be used. If `at` is a range, the closest common root will
+   * be targetted.
+   *
+   * @param editor Editor instance to traverse
+   * @param options.at Target location. Will determine the last yielded
+   *  entry or in the case where `reverse ` is true, it will determine
+   *  the first. If `at` is a range, the closest common root will be targetted.
+   * @param options.match Predicate function to filter yielded results
+   * @param options.reverse If set to true, reverses the order of yielded nodes
+   * @param options.voids Whether or not to include void nodes. Defaults to false
+   *
+   * @yields [Node, Path] entries
    */
 
   *levels<T extends Node>(
@@ -501,6 +659,10 @@ export const Editor = {
 
   /**
    * Get the marks that would be added to text at the current selection.
+   *
+   * @param editor Editor instance containing the marks
+   *
+   * @returns a marks object containing key / value pairs
    */
 
   marks(editor: Editor): Record<string, any> | null {
@@ -552,6 +714,22 @@ export const Editor = {
 
   /**
    * Get the matching node in the branch of the document after a location.
+   *
+   * An Editor.nodes() tree traversal will be defined starting with the last node
+   * of the `at` location and ending with the last node of the `editor`. The
+   * traversal can be further constrained by the `mode` and `voids` options.
+   *
+   * @param editor Editor containing the node
+   * @param options.at Starting location (defaults to editor.selection). Node
+   *  traversal will start at the last node of the `at` location and end at the
+   *  last node of the `editor` until a match is found. If `at` is a `Path`, the
+   *  node traversal will be constrained to direct sibling nodes in the current
+   *  subtree
+   * @param options.match Predicate function that filters the nodes that get traversed
+   * @param options.mode Optionally constrain the node traversal to a level of the tree
+   * @param options.voids Optionally include void nodes in the traversal
+   *
+   * @returns [Node, Path] entry for next matching node
    */
 
   next<T extends Node>(
@@ -593,6 +771,13 @@ export const Editor = {
 
   /**
    * Get the node at a location.
+   *
+   * @param at Location to check
+   * @param options.depth Max path depth to search
+   * @param options.edge Return the Path to the start or end leaf node for the
+   *  tree determined by the `at` and `options.depth` args
+   *
+   * @returns A [Node, Path] tuple for the matching node
    */
 
   node(
@@ -610,6 +795,22 @@ export const Editor = {
 
   /**
    * Iterate through all of the nodes in the Editor.
+   *
+   * The at + match options determine an initial node set to yield.
+   * The mode, universal, and voids options can be used to apply additional
+   * constraints to determine which nodes are yielded. The reverse option determines
+   * the order in which child nodes are returned.
+   *
+   * @param editor Editor containing the nodes to iterate
+   * @param options.at Location to constrain the list of nodes to. Defaults to editor.selection
+   * @param options.match Predicate function to filter the list of yielded nodes
+   * @param options.mode Further constrains the yielded node set to a single level of the tree
+   * @param options.universal Setting this to true means that all Text nodes that
+   *  are included in the at + mode constraints must also satisfy the match constraint
+   * @param options.reverse Reverse the order of nodes yielded across the current level
+   * @param options.voids Whether or not to include void elements in the result
+   *
+   * @yields [Node, Path] tuples matching the given constraints
    */
 
   *nodes<T extends Node>(
@@ -720,6 +921,9 @@ export const Editor = {
   },
   /**
    * Normalize any dirty objects in the editor.
+   *
+   * @param editor Editor to normalize
+   * @param options.force
    */
 
   normalize(
@@ -785,6 +989,14 @@ export const Editor = {
 
   /**
    * Get the path of a location.
+   *
+   * @param editor Editor containing the location to check
+   * @param at Location to check
+   * @param options.depth Max path depth to search
+   * @param options.edge Return the Path to the start or end leaf node for the
+   *  tree determined by the `at` and `options.depth` args
+   *
+   * @returns The path matching the given criteria
    */
 
   path(
@@ -1196,6 +1408,9 @@ export const Editor = {
    *
    * If the selection is currently collapsed, the removal will be stored on
    * `editor.marks` and applied to the text inserted next.
+   *
+   * @param editor Editor instance that will have the mark removed
+   * @param key Property key that will be removed
    */
 
   removeMark(editor: Editor, key: string): void {

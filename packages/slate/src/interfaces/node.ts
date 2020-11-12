@@ -363,6 +363,14 @@ export const Node = {
    * Return a generator of all the node entries of a root node. Each entry is
    * returned as a `[Node, Path]` tuple, with the path referring to the node's
    * position inside the root node.
+   *
+   * @param root The root node
+   * @param options.from Node path to start from. Defaults to the root node
+   * @param options.to Node path to end with
+   * @param options.reverse If true, iterate nodes in reverse
+   * @param options.pass Skip any `[Node, Path]` tuples that match the given predicate function
+   *
+   * @returns A generator that yields `[Node, Path]` tuples
    */
 
   *nodes(
